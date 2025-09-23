@@ -1,0 +1,67 @@
+package pepse;
+
+import danogl.GameManager;
+import danogl.GameObject;
+import danogl.collisions.Layer;
+import danogl.gui.ImageReader;
+import danogl.gui.SoundReader;
+import danogl.gui.UserInputListener;
+import danogl.gui.WindowController;
+import danogl.util.Vector2;
+import pepse.world.*;
+import pepse.world.daynight.Night;
+import pepse.world.daynight.Sun;
+import pepse.world.daynight.SunHalo;
+
+import java.util.List;
+
+public class PepseGameManager extends GameManager {
+    static final float CYCLE_LENGTH = 15f;
+    private ImageReader imageReader;
+    private SoundReader soundReader;
+    private UserInputListener inputListener;
+    private WindowController windowController;
+
+    public static void main(String[] args) {
+        new PepseGameManager().run();
+    }
+
+    @Override
+    public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
+        this.imageReader = imageReader;
+        this.soundReader = soundReader;
+        this.inputListener = inputListener;
+        this.windowController = windowController;
+        super.initializeGame(imageReader, soundReader, inputListener, windowController);
+        GameObject sky = Sky.create(windowController.getWindowDimensions());
+        gameObjects().addGameObject(sky, Layer.BACKGROUND);
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), 1234);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
+        GameObject sunHalo = SunHalo.create(sun);
+        gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
+        gameObjects().addGameObject(sun, Layer.BACKGROUND);
+
+
+        List<Block> blocks = terrain.createInRange(0, (int) windowController.getWindowDimensions().x());
+        for (Block block : blocks) {
+            //todo for optimization, maybe switch some blocks to the background
+            gameObjects().addGameObject(block, Layer.STATIC_OBJECTS);
+        }
+
+        GameObject night = Night.create(windowController.getWindowDimensions(), CYCLE_LENGTH);
+        gameObjects().addGameObject(night, Layer.FOREGROUND);
+
+
+        //todo decide on initial position
+        float startingX = windowController.getWindowDimensions().x() / 2f;
+        float startingY = windowController.getWindowDimensions().y() / 2f;
+        Vector2 initialPosition = new Vector2(startingX, startingY);
+        var avatar = new Avatar(initialPosition, inputListener, imageReader);
+        gameObjects().addGameObject(avatar, Layer.DEFAULT);
+
+        Vector2 energyBarPosition = new Vector2(20f, 20f); // Top-left corner, adjust as needed
+        EnergyBar energyBar = new EnergyBar(energyBarPosition, 100f, avatar::getEnergy);
+        gameObjects().addGameObject(energyBar, Layer.UI);
+
+    }
+}
