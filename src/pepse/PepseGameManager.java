@@ -15,10 +15,13 @@ import pepse.world.daynight.SunHalo;
 import pepse.world.trees.Tree;
 
 import java.util.List;
+import java.util.Random;
+import java.util.function.IntPredicate;
 
 public class PepseGameManager extends GameManager {
     static final int SEED = 100;
     static final float CYCLE_LENGTH_OF_DAY = 15f;
+    static final float CHANCE_FOR_TREE = 0.3f;
     private Terrain terrain;
     private ImageReader imageReader;
     private SoundReader soundReader;
@@ -41,7 +44,7 @@ public class PepseGameManager extends GameManager {
         makeBackgroundObjects();
         Avatar avatar = makeAvatar();
         makeEnergyBar(avatar);
-        placeTreeAt(60);
+        placeTreesInRange(0, windowController.getWindowDimensions().x());
 
     }
 
@@ -79,6 +82,28 @@ public class PepseGameManager extends GameManager {
         gameObjects().addGameObject(sun, Layer.BACKGROUND);
         GameObject night = Night.create(windowController.getWindowDimensions(), CYCLE_LENGTH_OF_DAY);
         gameObjects().addGameObject(night, Layer.FOREGROUND);
+    }
+
+    private void placeTreesInRange(float minX, float maxX) {
+
+        int blockSize = Block.SIZE;
+        int start = Math.round(minX / blockSize) * blockSize;
+        int end = Math.round(maxX / blockSize) * blockSize;
+
+        for (int x = start; x <= end; x += blockSize) {
+            float y = pseudoRandomFloatAt(x);
+            if (y < CHANCE_FOR_TREE) {
+                placeTreeAt((float) x);
+            }
+        }
+    }
+
+    public static float pseudoRandomFloatAt(int x) {
+        int z = x;
+        z = (z ^ (z >>> 16)) * 0x45d9f3b;
+        z = (z ^ (z >>> 16)) * 0x45d9f3b;
+        z = z ^ (z >>> 16);
+        return (z & 0x7FFFFFFF) / (float) Integer.MAX_VALUE;
     }
 
     private void placeTreeAt(float locationX) {

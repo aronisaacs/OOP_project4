@@ -19,17 +19,22 @@ public class Tree {
     private static final int TRUNK_HEIGHT_MAX = 8;
     private static final int FOLIAGE_WIDTH_BLOCKS = 5;
     private static final int FOLIAGE_HEIGHT_BLOCKS = 6;
+    private static final float LEAF_RATIO = 0.7f;
+    private static final float FRUIT_RATIO = 0.2f;
 
 
     private final GameObject trunk;
     private final Set<GameObject> leaves;
     private final Set<Fruit> fruits;
+    private final BiConsumer<GameObject, Integer> addObject;
     private final BiConsumer<GameObject, Integer> removeObject;
+    private final Random random;
 
 
     public Tree(Vector2 position, BiConsumer<GameObject, Integer> addObject, BiConsumer<GameObject, Integer> removeObject) {
+        this.addObject = addObject;
         this.removeObject = removeObject;
-        Random random = new Random((long) position.x());
+        random = new Random((long) position.x());
 
 
         int trunkWidth = BLOCK_SIZE;
@@ -51,24 +56,26 @@ public class Tree {
 
         for (int i = 0; i < FOLIAGE_WIDTH_BLOCKS; i++) {
             for (int j = 0; j < FOLIAGE_HEIGHT_BLOCKS; j++) {
-                int choice = random.nextInt(3); // 0: leaf, 1: fruit, 2: nothing
-                float x = startX + i * BLOCK_SIZE;
-                float y = startY + j * BLOCK_SIZE;
-                Vector2 objPos = new Vector2(x, y);
-
-
-                if (choice == 0) {
-                    GameObject leaf = Leaf.create(objPos);
-                    this.leaves.add(leaf);
-                    addObject.accept(leaf, Layer.BACKGROUND);
-                } else if (choice == 1) {
-                    Fruit fruit = new Fruit(objPos);
-                    this.fruits.add(fruit);
-                    addObject.accept(fruit, Layer.STATIC_OBJECTS);
-                }
+                makeFoliageBlock(startX + i * BLOCK_SIZE, startY + j * BLOCK_SIZE );
             }
         }
     }
+
+    private void makeFoliageBlock( float x, float y) {
+        float choice = random.nextFloat(1); // 0: leaf, 1: fruit, 2: nothing
+        Vector2 objPos = new Vector2(x, y);
+
+        if (choice < LEAF_RATIO) {
+            GameObject leaf = Leaf.create(objPos);
+            this.leaves.add(leaf);
+            addObject.accept(leaf, Layer.BACKGROUND);
+        } else if (choice < LEAF_RATIO + FRUIT_RATIO) {
+            Fruit fruit = new Fruit(objPos);
+            this.fruits.add(fruit);
+            addObject.accept(fruit, Layer.STATIC_OBJECTS);
+        }
+    }
+
 
     public void destroy() {
         removeObject.accept(trunk, Layer.STATIC_OBJECTS);

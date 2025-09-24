@@ -154,8 +154,8 @@ public class Avatar extends GameObject {
     }
 
 
-    private void gainEnergy(float deltaTime) {
-        energy = Math.min(MAX_ENERGY, energy + ENERGY_GAIN_RATE * deltaTime);
+    public void gainEnergy(float amount) {
+        energy = Math.min(MAX_ENERGY, energy + amount);
     }
 
     private void loseEnergy(float amount) {
