@@ -90,7 +90,8 @@ public class PepseGameManager extends GameManager {
         Vector2 position = new Vector2(x, y);
 
         new Tree(position,
-                (gameObject, layer) -> gameObjects().addGameObject(gameObject, layer)
+                (gameObject, layer) -> gameObjects().addGameObject(gameObject, layer),
+                ( gameObject, layer) -> gameObjects().removeGameObject(gameObject)
         );
     }
 

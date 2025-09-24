@@ -24,9 +24,11 @@ public class Tree {
     private final GameObject trunk;
     private final Set<GameObject> leaves;
     private final Set<Fruit> fruits;
+    private final BiConsumer<GameObject, Integer> removeObject;
 
 
-    public Tree(Vector2 position, BiConsumer<GameObject, Integer> addObject) {
+    public Tree(Vector2 position, BiConsumer<GameObject, Integer> addObject, BiConsumer<GameObject, Integer> removeObject) {
+        this.removeObject = removeObject;
         Random random = new Random((long) position.x());
 
 
@@ -65,6 +67,16 @@ public class Tree {
                     addObject.accept(fruit, Layer.STATIC_OBJECTS);
                 }
             }
+        }
+    }
+
+    public void destroy() {
+        removeObject.accept(trunk, Layer.STATIC_OBJECTS);
+        for (GameObject leaf : leaves) {
+            removeObject.accept(leaf, Layer.BACKGROUND);
+        }
+        for (Fruit fruit : fruits) {
+            removeObject.accept(fruit, Layer.STATIC_OBJECTS);
         }
     }
 }
