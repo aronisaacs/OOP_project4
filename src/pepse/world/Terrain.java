@@ -28,8 +28,10 @@ public class Terrain {
     }
 
     public float groundHeightAt(float x) {
-        float noise = (float) noiseGenerator.noise(x, Block.SIZE *7);
-        return groundHeightAtX0 + noise;
+        float startOfBlock = (x / Block.SIZE) * Block.SIZE;
+        int noise = (int) noiseGenerator.noise(startOfBlock, Block.SIZE *7);
+        return  ((groundHeightAtX0 + noise) / Block.SIZE) * Block.SIZE;
+
     }
 
     public List<Block> createInRange(int minX, int maxX) {
