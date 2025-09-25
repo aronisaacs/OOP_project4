@@ -1,23 +1,3 @@
-
-//package pepse.world.trees;
-//
-//import danogl.GameObject;
-//import danogl.gui.rendering.OvalRenderable;
-//import danogl.util.Vector2;
-//import pepse.world.Block;
-//
-//import java.awt.*;
-//
-//public class Fruit extends GameObject {
-//    private static final Vector2 FRUIT_SIZE = new Vector2(Block.SIZE, Block.SIZE);
-//    private static final Color FRUIT_COLOR = new Color(255, 69, 0);
-//
-//    public Fruit(Vector2 position) {
-//        super(position, FRUIT_SIZE, new OvalRenderable(FRUIT_COLOR));
-//        setTag("fruit");
-//    }
-//}
-
 package pepse.world.trees;
 
 import danogl.GameObject;
@@ -31,8 +11,10 @@ import pepse.world.Avatar;
 
 import java.awt.*;
 
+import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+
 public class Fruit extends GameObject {
-    private static final Vector2 FRUIT_SIZE = new Vector2(Block.SIZE, Block.SIZE);
+    private static final Vector2 FRUIT_SIZE = new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE);
     private static final Color FRUIT_COLOR = new Color(255, 69, 0);
     private static final float RESPAWN_TIME_SECONDS = 15f;
     private static final int ENERGY_VALUE = 10;

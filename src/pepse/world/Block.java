@@ -5,9 +5,11 @@ import danogl.components.GameObjectPhysics;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
+import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+
 public class Block extends GameObject {
 
-    public static final int SIZE = 30;
+    private static final int SIZE = GAME_BLOCK_SIZE;
 
     public Block(Vector2 topLeftCorner, Renderable renderable) {
         super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);

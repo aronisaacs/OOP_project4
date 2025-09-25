@@ -9,12 +9,13 @@ import java.awt.Color;
 import java.util.function.Supplier;
 
 public class EnergyBar extends GameObject {
+    private static final Vector2 BAR_SIZE = new Vector2(60, 20);
     private final Supplier<Float> energySupplier;
     private final float maxEnergy;
     private final TextRenderable textRenderable;
 
     public EnergyBar(Vector2 topLeftCorner, float maxEnergy, Supplier<Float> energySupplier) {
-        super(topLeftCorner, new Vector2(60, 20), null);
+        super(topLeftCorner, BAR_SIZE, null);
         this.maxEnergy = maxEnergy;
         this.energySupplier = energySupplier;
         this.textRenderable = new TextRenderable("");

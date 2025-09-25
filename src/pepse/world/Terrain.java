@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
 
 
 public class Terrain {
@@ -27,10 +28,10 @@ public class Terrain {
         this.noiseGenerator = new NoiseGenerator(seed, groundHeightAtX0);
     }
 
-    public float groundHeightAt(float x) {
-        float startOfBlock = (x / Block.SIZE) * Block.SIZE;
-        int noise = (int) noiseGenerator.noise(startOfBlock, Block.SIZE *7);
-        return  ((groundHeightAtX0 + noise) / Block.SIZE) * Block.SIZE;
+    public int groundHeightAt(float x) {
+        float startOfBlock = (x / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int noise = (int) noiseGenerator.noise(startOfBlock, GAME_BLOCK_SIZE *7);
+        return  ((groundHeightAtX0 + noise) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
 
     }
 
@@ -38,10 +39,10 @@ public class Terrain {
         List<Block> blocks = new ArrayList<>();
 
         // Align min and max to block grid
-        int alignedMinX = (minX / Block.SIZE) * Block.SIZE;
-        int alignedMaxX = ((maxX + Block.SIZE - 1) / Block.SIZE) * Block.SIZE;
+        int alignedMinX = (minX / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int alignedMaxX = ((maxX + GAME_BLOCK_SIZE - 1) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
 
-        for (int x = alignedMinX; x < alignedMaxX; x += Block.SIZE) {
+        for (int x = alignedMinX; x < alignedMaxX; x += GAME_BLOCK_SIZE) {
             float topY = groundHeightAt(x);
             createColumnOfBlocks(x, topY, blocks);
         }
@@ -51,7 +52,7 @@ public class Terrain {
 
     private static void createColumnOfBlocks(int x, float topY, List<Block> blocks) {
         for (int i = 0; i < BLOCK_DEPTH; i++) {
-            Vector2 topLeft = new Vector2(x, topY + i * Block.SIZE);
+            Vector2 topLeft = new Vector2(x, topY + i * GAME_BLOCK_SIZE);
 
             Block block = new Block(
                     topLeft,

@@ -12,8 +12,10 @@ import pepse.world.Block;
 import java.awt.*;
 import java.util.Random;
 
+import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+
 public class Leaf {
-    private static final Vector2 LEAF_SIZE = new Vector2(Block.SIZE, Block.SIZE);
+    private static final Vector2 LEAF_SIZE = new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE);
     private static final Color LEAF_COLOR = new Color(34, 139, 34);
     private static final float SWAY_ANGLE = 5f; // degrees
     private static final float SCALE_VARIATION = 0.2f;
@@ -55,7 +57,7 @@ public class Leaf {
         // and 1.10
         new Transition<Float>(
                 leaf,
-                f -> leaf.setDimensions(new Vector2(Block.SIZE, Block.SIZE).mult(f)),
+                f -> leaf.setDimensions(new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE).mult(f)),
                 1f,
                 scaleFactor,
                 Transition.CUBIC_INTERPOLATOR_FLOAT,
