@@ -135,7 +135,7 @@ public class Avatar extends GameObject {
         transform().setVelocityX(xVel);
 
         if (state == State.IDLE) {
-            gainEnergy(deltaTime);
+            gainEnergy(deltaTime * ENERGY_GAIN_RATE);
         }
     }
 

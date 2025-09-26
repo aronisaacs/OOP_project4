@@ -6,7 +6,6 @@ import danogl.components.ScheduledTask;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import pepse.world.Block;
 import pepse.world.Avatar;
 
 import java.awt.*;

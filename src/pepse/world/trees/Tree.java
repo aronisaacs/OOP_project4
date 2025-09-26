@@ -4,7 +4,6 @@ package pepse.world.trees;
 import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.util.Vector2;
-import pepse.world.Block;
 
 
 import java.util.HashSet;
