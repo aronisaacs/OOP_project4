@@ -15,7 +15,7 @@ public class Avatar extends GameObject {
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
-    private static final float AVATAR_SIZE = 50f;
+    public static final float AVATAR_SIZE = 50f;
 
     public static final float MAX_ENERGY = 100f;
     private static final float ENERGY_GAIN_RATE = 3f; // per second

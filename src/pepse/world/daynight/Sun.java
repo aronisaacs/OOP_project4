@@ -12,6 +12,7 @@ import pepse.world.Terrain;
 import java.awt.Color;
 
 public class Sun {
+    public static final float CYCLE_LENGTH_OF_DAY = 15f;
     private static final float SUN_SIZE_RATIO = 0.1f; // Sun diameter is 10% of window width
     private static final float SUN_PATH_RADIUS_RATIO = 0.4f; // Orbit radius is 40% of window width
     private static final Color SUN_COLOR = Color.YELLOW;

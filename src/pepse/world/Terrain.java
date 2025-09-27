@@ -4,37 +4,27 @@ import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
 import pepse.util.ColorSupplier;
 import pepse.util.NoiseGenerator;
-
+import pepse.world.infiniteworld.Scrollable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
 
-
-public class Terrain {
+public class Terrain extends Scrollable<Block> {
     public static final float GROUND_RATIO = 0.7f;
     public int groundHeightAtX0;
-    private final Vector2 windowDimensions;
-    private final int seed;
     public static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
     private static final int BLOCK_DEPTH = 20; // number of blocks below surface
-    private NoiseGenerator noiseGenerator;
+    private final NoiseGenerator noiseGenerator;
+
 
     public Terrain(Vector2 windowDimensions, int seed){
         groundHeightAtX0 = (int) ( windowDimensions.y() * GROUND_RATIO);
-        this.windowDimensions = windowDimensions;
-        this.seed = seed;
         this.noiseGenerator = new NoiseGenerator(seed, groundHeightAtX0);
     }
 
-    public int groundHeightAt(float x) {
-        float startOfBlock = (x / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
-        int noise = (int) noiseGenerator.noise(startOfBlock, GAME_BLOCK_SIZE *7);
-        return  ((groundHeightAtX0 + noise) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
 
-    }
-
+    @Override
     public List<Block> createInRange(int minX, int maxX) {
         List<Block> blocks = new ArrayList<>();
 
@@ -64,5 +54,12 @@ public class Terrain {
         }
     }
 
+    public float groundHeightAt(float x) {
+        //note the castings to int and then back to float are to ensure the height is aligned to the block
+        // grid. The API of the project requires both the parameter and return value to be a float.
+        int startOfBlock = (((int) x) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int noise = (int) noiseGenerator.noise(startOfBlock, GAME_BLOCK_SIZE *7);
+        return (float) ((groundHeightAtX0 + noise) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
 
+    }
 }

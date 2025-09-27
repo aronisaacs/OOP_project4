@@ -4,6 +4,7 @@ package pepse.world.trees;
 import danogl.GameObject;
 import danogl.collisions.Layer;
 import danogl.util.Vector2;
+import pepse.world.infiniteworld.ChunkLoadable;
 
 
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.function.BiConsumer;
 import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
 
 
-public class Tree {
+public class Tree implements ChunkLoadable {
     private static final int TREE_WIDTH = GAME_BLOCK_SIZE;
     private static final int TRUNK_HEIGHT_MIN = 4;
     private static final int TRUNK_HEIGHT_MAX = 8;
@@ -27,15 +28,11 @@ public class Tree {
     private final GameObject trunk;
     private final Set<GameObject> leaves;
     private final Set<Fruit> fruits;
-    private final BiConsumer<GameObject, Integer> addObject;
-    private final BiConsumer<GameObject, Integer> removeObject;
     private final Random random;
 
 
-    public Tree(Vector2 position, BiConsumer<GameObject, Integer> addObject, BiConsumer<GameObject,
-            Integer> removeObject) {
-        this.addObject = addObject;
-        this.removeObject = removeObject;
+    public Tree(Vector2 position) {
+
         random = new Random((long) position.x() + (long) position.y() * 31);
 
 
@@ -44,7 +41,7 @@ public class Tree {
 
 
         this.trunk = Trunk.create(position.add(new Vector2(0, -trunkHeight)), new Vector2(TREE_WIDTH, trunkHeight));
-        addObject.accept(this.trunk, Layer.STATIC_OBJECTS);
+
 
 
         this.leaves = new HashSet<>();
@@ -69,16 +66,23 @@ public class Tree {
         if (choice < LEAF_RATIO) {
             GameObject leaf = Leaf.create(objPos);
             this.leaves.add(leaf);
-            addObject.accept(leaf, Layer.BACKGROUND);
         } else if (choice < LEAF_RATIO + FRUIT_RATIO) {
             Fruit fruit = new Fruit(objPos);
             this.fruits.add(fruit);
+        }
+    }
+
+    public void addToGame(BiConsumer<GameObject, Integer> addObject) {
+        addObject.accept(trunk, Layer.STATIC_OBJECTS);
+        for (GameObject leaf : leaves) {
+            addObject.accept(leaf, Layer.BACKGROUND);
+        }
+        for (Fruit fruit : fruits) {
             addObject.accept(fruit, Layer.STATIC_OBJECTS);
         }
     }
 
-
-    public void destroy() {
+    public void destroy(BiConsumer<GameObject, Integer> removeObject) {
         removeObject.accept(trunk, Layer.STATIC_OBJECTS);
         for (GameObject leaf : leaves) {
             removeObject.accept(leaf, Layer.BACKGROUND);

@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.function.Supplier;
 
 public class EnergyBar extends GameObject {
+    public static final Vector2 ENERGY_BAR_POSITION = new Vector2(20f, 20f);
     private static final Vector2 BAR_SIZE = new Vector2(60, 20);
     private final Supplier<Float> energySupplier;
     private final float maxEnergy;
