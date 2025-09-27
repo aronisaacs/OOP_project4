@@ -5,13 +5,17 @@ import danogl.components.CoordinateSpace;
 import danogl.components.Transition;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.Renderable;
-import danogl.gui.rendering.OvalRenderable;
 import danogl.util.Vector2;
 import pepse.world.Terrain;
 
 import java.awt.Color;
 
 public class Sun {
+    /**
+     * The duration (in seconds) of a full day-night cycle.
+     */
+    public static final float CYCLE_LENGTH_OF_DAY = 15f;
+    
     private static final float SUN_SIZE_RATIO = 0.1f; // Sun diameter is 10% of window width
     private static final float SUN_PATH_RADIUS_RATIO = 0.4f; // Orbit radius is 40% of window width
     private static final Color SUN_COLOR = Color.YELLOW;
@@ -35,24 +39,29 @@ public class Sun {
         Vector2 initialSunCenter = cycleCenter.add(new Vector2(0, -orbitRadius));
         sun.setCenter(initialSunCenter);
 
-        // Animate the sun's position along a circular path
-        new Transition<Float>(
+        addSunTransition(sun, initialSunCenter, cycleCenter);
+
+        sun.setTag("sun");
+        return sun;
+    }
+
+    /** Adds a transition to the sun GameObject to move it in a circular path.
+     * @param sun The sun GameObject to animate.
+     * @param initialSunCenter The initial center position of the sun.
+     * @param cycleCenter The center of the circular path.
+     */
+    private static void addSunTransition(GameObject sun, Vector2 initialSunCenter, Vector2 cycleCenter) {
+        new Transition<>(
                 sun,
-                angle -> {
-                    sun.setCenter
-                            (initialSunCenter.subtract(cycleCenter)
-                                    .rotated(angle)
-                                    .add(cycleCenter));
+                angle ->
+                {sun.setCenter(initialSunCenter.subtract(cycleCenter).rotated(angle).add(cycleCenter));
                 },
                 0f,
                 360f,
                 Transition.LINEAR_INTERPOLATOR_FLOAT,
-                cycleLength,
+                CYCLE_LENGTH_OF_DAY,
                 Transition.TransitionType.TRANSITION_LOOP,
                 null
         );
-
-        sun.setTag("sun");
-        return sun;
     }
 }
