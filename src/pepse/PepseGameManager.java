@@ -45,7 +45,7 @@ public class PepseGameManager extends GameManager {
     // all times are in seconds
     public final static int GAME_BLOCK_SIZE = 30;// Top-left corner, adjust as needed
 
-    private static final int SEED = new Random().nextInt();
+    private static final int SEED = 5;
     private ImageReader imageReader;
     private UserInputListener inputListener;
     private WindowController windowController;
