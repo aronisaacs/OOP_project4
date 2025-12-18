@@ -62,6 +62,7 @@ public class PepseGameManager extends GameManager {
         new PepseGameManager().run();
     }
 
+
     /**
      * Initializes the game by creating the terrain, background objects, avatar, and energy bar.
      * This method is called by the danogl library when the game starts.
