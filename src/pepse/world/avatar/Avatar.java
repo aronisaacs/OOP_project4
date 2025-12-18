@@ -1,4 +1,4 @@
-package pepse.world;
+package pepse.world.avatar;
 
 import danogl.GameObject;
 import danogl.gui.ImageReader;
@@ -6,7 +6,7 @@ import danogl.gui.UserInputListener;
 import danogl.gui.rendering.AnimationRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import java.awt.*;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -22,21 +22,22 @@ public class Avatar extends GameObject {
     public static final float AVATAR_SIZE = 50f;
 
     public static final float MAX_ENERGY = 100f;
-    private static final float ENERGY_GAIN_RATE = 3f; // per second
-    private static final float ENERGY_LOSS_MOVE = 5f;  // per second
-    private static final float ENERGY_LOSS_JUMP = 10f;
+    private static final float ENERGY_GAIN_RATE = 1f; // per second
+    private static final float ENERGY_LOSS_MOVE = 2f;  // per second
+    private static final float ENERGY_LOSS_JUMP = 20f;
+    private static final float ENERGY_DOUBLE_LOSS_JUMP = 50f;
 
 
 
     // Animation file name arrays
     private static final String[] IDLE_FRAMES = {
-            "idle_0.png", "idle_1.png", "idle_2.png", "idle_3.png"
+            "assets/idle_0.png", "assets/idle_1.png", "assets/idle_2.png", "assets/idle_3.png"
     };
     private static final String[] RUN_FRAMES = {
-            "run_0.png", "run_1.png", "run_2.png", "run_3.png", "run_4.png", "run_5.png"
+            "assets/run_0.png", "assets/run_1.png", "assets/run_2.png", "assets/run_3.png", "assets/run_4.png", "assets/run_5.png"
     };
     private static final String[] JUMP_FRAMES = {
-            "jump_0.png", "jump_1.png", "jump_2.png", "jump_3.png"
+            "assets/jump_0.png", "assets/jump_1.png", "assets/jump_2.png", "assets/jump_3.png"
     };
 
 
@@ -51,12 +52,12 @@ public class Avatar extends GameObject {
     /**
      * Constructs an Avatar object at the specified position with the given input listener and image reader.
      * Initializes the avatar's physics, animations, and rendering.
-     * @param pos The initial position of the avatar in the game world.
+     * @param topLeftCorner The initial position of the avatar in the game world.
      * @param inputListener The listener for user input to control the avatar.
      * @param imageReader The image reader to load avatar animations.
      */
-    public Avatar(Vector2 pos, UserInputListener inputListener, ImageReader imageReader) {
-        super(pos, Vector2.ONES.mult(AVATAR_SIZE), imageReader.readImage(IDLE_FRAMES[0], true));
+    public Avatar(Vector2 topLeftCorner, UserInputListener inputListener, ImageReader imageReader) {
+        super(topLeftCorner, Vector2.ONES.mult(AVATAR_SIZE), imageReader.readImage(IDLE_FRAMES[0], true));
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         transform().setAccelerationY(GRAVITY);
 

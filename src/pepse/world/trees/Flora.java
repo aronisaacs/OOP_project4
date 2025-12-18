@@ -5,7 +5,7 @@ import pepse.world.infiniteworld.GroundHeightAt;
 import pepse.world.infiniteworld.Scrollable;
 import java.util.*;
 
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 /**
  * Manages the creation and placement of trees in the game world.
@@ -43,10 +43,10 @@ public class Flora extends Scrollable<Tree> {
      */
     public List<Tree> createInRange(int minX, int maxX) {
         List<Tree> newTrees = new ArrayList<>();
-        int start = (minX / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
-        int end = (maxX / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int start = (minX / SIZE) * SIZE;
+        int end = (maxX / SIZE) * SIZE;
 
-        for (int x = start; x <= end; x += GAME_BLOCK_SIZE) {
+        for (int x = start; x <= end; x += SIZE) {
             float y = pseudoRandomFloatAt(x);
             if (y < CHANCE_FOR_TREE) {
                 newTrees.add(placeTreeAt((float) x));
@@ -63,7 +63,7 @@ public class Flora extends Scrollable<Tree> {
      */
     private Tree placeTreeAt(float locationX) {
         // Align x to block size
-        float x = Math.round(locationX / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        float x = Math.round(locationX / SIZE) * SIZE;
         // Example: place tree at ground level (adjust as needed)
         float y = groundHeightAt.accept(x);
         Vector2 position = new Vector2(x, y);

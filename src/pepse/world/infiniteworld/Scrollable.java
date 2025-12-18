@@ -3,7 +3,7 @@ package pepse.world.infiniteworld;
 import danogl.GameObject;
 import java.util.List;
 import java.util.function.BiConsumer;
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 
 /**
@@ -15,7 +15,7 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
  */
 public abstract class Scrollable<T extends ChunkLoadable> {
 
-    private static final int CHUNK_SIZE = GAME_BLOCK_SIZE * 8;
+    private static final int CHUNK_SIZE = SIZE * 8;
     private static final int RANGE_BEFORE = 6;
     private static final int RANGE_AFTER = 6;
 

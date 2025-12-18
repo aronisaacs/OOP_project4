@@ -11,10 +11,6 @@ import pepse.world.Terrain;
 import java.awt.Color;
 
 public class Sun {
-    /**
-     * The duration (in seconds) of a full day-night cycle.
-     */
-    public static final float CYCLE_LENGTH_OF_DAY = 15f;
     
     private static final float SUN_SIZE_RATIO = 0.1f; // Sun diameter is 10% of window width
     private static final float SUN_PATH_RADIUS_RATIO = 0.4f; // Orbit radius is 40% of window width
@@ -39,7 +35,7 @@ public class Sun {
         Vector2 initialSunCenter = cycleCenter.add(new Vector2(0, -orbitRadius));
         sun.setCenter(initialSunCenter);
 
-        addSunTransition(sun, initialSunCenter, cycleCenter);
+        addSunTransition(sun, initialSunCenter, cycleCenter, cycleLength);
 
         sun.setTag("sun");
         return sun;
@@ -50,7 +46,7 @@ public class Sun {
      * @param initialSunCenter The initial center position of the sun.
      * @param cycleCenter The center of the circular path.
      */
-    private static void addSunTransition(GameObject sun, Vector2 initialSunCenter, Vector2 cycleCenter) {
+    private static void addSunTransition(GameObject sun, Vector2 initialSunCenter, Vector2 cycleCenter, float cycleLength) {
         new Transition<>(
                 sun,
                 angle ->
@@ -59,7 +55,7 @@ public class Sun {
                 0f,
                 360f,
                 Transition.LINEAR_INTERPOLATOR_FLOAT,
-                CYCLE_LENGTH_OF_DAY,
+                cycleLength,
                 Transition.TransitionType.TRANSITION_LOOP,
                 null
         );

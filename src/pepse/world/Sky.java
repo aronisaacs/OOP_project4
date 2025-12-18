@@ -26,7 +26,6 @@ public class Sky {
         sky.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         sky.setTag("sky");
         return sky;
-
     }
 
 }

@@ -2,13 +2,13 @@ package pepse.world;
 
 import danogl.gui.rendering.RectangleRenderable;
 import danogl.util.Vector2;
-import pepse.util.ColorSupplier;
-import pepse.util.NoiseGenerator;
+import pepse.utils.ColorSupplier;
+import pepse.utils.NoiseGenerator;
 import pepse.world.infiniteworld.Scrollable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 /**
  * Manages the terrain in the game world, including ground height and block creation.
@@ -21,10 +21,11 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
 public class Terrain extends Scrollable<Block> {
     /** The ratio of the window height at which the ground starts. */
     public static final float GROUND_RATIO = 0.7f;
+    private static final int NOISE_FACTOR = 7;
 
     private final int groundHeightAtX0;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
-    private static final int BLOCK_DEPTH = 20; // number of blocks below surface
+    private static final int TERRAIN_DEPTH = 20; // number of blocks below surface
     private final NoiseGenerator noiseGenerator;
 
     /**
@@ -53,10 +54,10 @@ public class Terrain extends Scrollable<Block> {
         List<Block> blocks = new ArrayList<>();
 
         // Align min and max to block grid
-        int alignedMinX = (minX / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
-        int alignedMaxX = ((maxX + GAME_BLOCK_SIZE - 1) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int alignedMinX = (minX / SIZE) * SIZE;
+        int alignedMaxX = ((maxX + SIZE - 1) / SIZE) * SIZE;
 
-        for (int x = alignedMinX; x < alignedMaxX; x += GAME_BLOCK_SIZE) {
+        for (int x = alignedMinX; x < alignedMaxX; x += SIZE) {
             float topY = groundHeightAt(x);
             createColumnOfBlocks(x, topY, blocks);
         }
@@ -73,8 +74,8 @@ public class Terrain extends Scrollable<Block> {
      * @param blocks The list to which the created blocks will be added.
      */
     private static void createColumnOfBlocks(int x, float topY, List<Block> blocks) {
-        for (int i = 0; i < BLOCK_DEPTH; i++) {
-            Vector2 topLeft = new Vector2(x, topY + i * GAME_BLOCK_SIZE);
+        for (int i = 0; i < TERRAIN_DEPTH; i++) {
+            Vector2 topLeft = new Vector2(x, topY + i * SIZE);
 
             Block block = new Block(
                     topLeft,
@@ -95,9 +96,9 @@ public class Terrain extends Scrollable<Block> {
     public float groundHeightAt(float x) {
         //note the castings to int and then back to float are to ensure the height is aligned to the block
         // grid. The API of the project requires both the parameter and return value to be a float.
-        int startOfBlock = (((int) x) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
-        int noise = (int) noiseGenerator.noise(startOfBlock, GAME_BLOCK_SIZE *7);
-        return (float) ((groundHeightAtX0 + noise) / GAME_BLOCK_SIZE) * GAME_BLOCK_SIZE;
+        int startOfBlock = (((int) x) / SIZE) * SIZE;
+        int noise = (int) noiseGenerator.noise(startOfBlock, SIZE * NOISE_FACTOR);
+        return (float) ((groundHeightAtX0 + noise) / SIZE) * SIZE;
 
     }
 }

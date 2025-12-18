@@ -12,7 +12,7 @@ import java.awt.*;
  * @author Aron Isaacs
  */
 public class Trunk {
-    private static final Color TRUNK_COLOR = new Color(102, 51, 0);
+    private static final Color TRUNK_COLOR = new Color(100, 50, 20);
 
     /**
      * Creates a trunk GameObject at the specified position with the given dimensions.

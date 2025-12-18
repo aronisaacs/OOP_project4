@@ -10,6 +10,8 @@ import danogl.gui.WindowController;
 import danogl.gui.rendering.Camera;
 import danogl.util.Vector2;
 import pepse.world.*;
+import pepse.world.avatar.Avatar;
+import pepse.world.avatar.EnergyBar;
 import pepse.world.daynight.Night;
 import pepse.world.daynight.Sun;
 import pepse.world.daynight.SunHalo;
@@ -20,7 +22,6 @@ import pepse.world.trees.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 /**
@@ -43,9 +44,10 @@ public class PepseGameManager extends GameManager {
     generated randomly at the start of each game, and then kept constant to ensure object permanence.
      */
     // all times are in seconds
-    public final static int GAME_BLOCK_SIZE = 30;// Top-left corner, adjust as needed
+
 
     private static final int SEED = 5;
+    private static final float CYCLE_LENGTH_OF_DAY = 30f;
     private ImageReader imageReader;
     private UserInputListener inputListener;
     private WindowController windowController;
@@ -108,11 +110,11 @@ public class PepseGameManager extends GameManager {
     private void makeBackgroundObjects() {
         GameObject sky = Sky.create(windowController.getWindowDimensions());
         gameObjects().addGameObject(sky, Layer.BACKGROUND);
-        GameObject sun = Sun.create(windowController.getWindowDimensions(), Sun.CYCLE_LENGTH_OF_DAY);
+        GameObject sun = Sun.create(windowController.getWindowDimensions(), CYCLE_LENGTH_OF_DAY);
         GameObject sunHalo = SunHalo.create(sun);
         gameObjects().addGameObject(sunHalo, Layer.BACKGROUND);
         gameObjects().addGameObject(sun, Layer.BACKGROUND);
-        GameObject night = Night.create(windowController.getWindowDimensions(), Sun.CYCLE_LENGTH_OF_DAY);
+        GameObject night = Night.create(windowController.getWindowDimensions(), CYCLE_LENGTH_OF_DAY);
         gameObjects().addGameObject(night, Layer.FOREGROUND);
     }
 

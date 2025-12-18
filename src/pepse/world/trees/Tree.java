@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 /**
  * Represents a tree in the game world, consisting of a trunk, leaves, and fruits.
@@ -19,7 +19,7 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
  * @author Aron Isaacs
  */
 public class Tree implements ChunkLoadable {
-    private static final int TREE_WIDTH = GAME_BLOCK_SIZE;
+    private static final int TREE_WIDTH = SIZE;
     private static final int TRUNK_HEIGHT_MIN = 4;
     private static final int TRUNK_HEIGHT_MAX = 8;
     private static final int FOLIAGE_WIDTH_BLOCKS = 5;
@@ -39,7 +39,7 @@ public class Tree implements ChunkLoadable {
      * The tree consists of a trunk, leaves, and fruits, all generated with some randomness.
      * @param position The position to place the base of the tree in the game world.
      */
-    public Tree(Vector2 position) {
+    public Tree(Vector2 position){
 
         random = new Random((long) position.x() + (long) position.y() * 31);
         int trunkHeightBlocks = TRUNK_HEIGHT_MIN + random.nextInt(TRUNK_HEIGHT_MAX - TRUNK_HEIGHT_MIN + 1);

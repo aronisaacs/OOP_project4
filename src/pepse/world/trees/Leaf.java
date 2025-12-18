@@ -7,7 +7,7 @@ import danogl.util.Vector2;
 import java.awt.*;
 import java.util.Random;
 
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 /**
  * Represents a leaf in the game world with a swaying animation.
@@ -15,8 +15,8 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
  * @author Aron Isaacs
  */
 public class Leaf {
-    private static final Vector2 LEAF_SIZE = new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE);
-    private static final Color LEAF_COLOR = new Color(34, 139, 34);
+    private static final Vector2 LEAF_SIZE = new Vector2(SIZE, SIZE);
+    private static final Color LEAF_COLOR = new Color(50, 200, 30);
     private static final float SWAY_ANGLE = 5f; // degrees
     private static final float SCALE_VARIATION = 0.2f;
     private static final float SWAY_DURATION = 1.5f; // seconds
@@ -56,7 +56,7 @@ public class Leaf {
     private static void addScalingTransition(GameObject leaf, float scaleFactor, float swayFrequency) {
         new Transition<>(
                 leaf,
-                f -> leaf.setDimensions(new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE).mult(f)),
+                f -> leaf.setDimensions(new Vector2(SIZE, SIZE).mult(f)),
                 1f,
                 scaleFactor,
                 Transition.CUBIC_INTERPOLATOR_FLOAT,

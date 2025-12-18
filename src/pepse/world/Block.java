@@ -8,7 +8,6 @@ import danogl.util.Vector2;
 import pepse.world.infiniteworld.ChunkLoadable;
 import java.util.function.BiConsumer;
 
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
 
 /**
  * A class representing a block in the game world.
@@ -17,7 +16,7 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
  * @author Aron Isaacs
  */
 public class Block extends GameObject implements ChunkLoadable {
-
+    public final static int SIZE = 30;// Top-left corner, adjust as needed
 
     /**
      * Constructs a Block object at the specified position with the given renderable.
@@ -26,7 +25,7 @@ public class Block extends GameObject implements ChunkLoadable {
      * @param renderable The renderable to use for the block's appearance.
      */
     public Block(Vector2 topLeftCorner, Renderable renderable) {
-        super(topLeftCorner, Vector2.ONES.mult(GAME_BLOCK_SIZE), renderable);
+        super(topLeftCorner, Vector2.ONES.mult(SIZE), renderable);
         physics().preventIntersectionsFromDirection(Vector2.ZERO);
         physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
     }

@@ -6,10 +6,10 @@ import danogl.components.ScheduledTask;
 import danogl.gui.rendering.OvalRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import pepse.world.Avatar;
+import pepse.world.avatar.Avatar;
 import java.awt.*;
 
-import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
+import static pepse.world.Block.SIZE;
 
 /**
  * Represents a fruit in the game that can be collected by the avatar to gain energy.
@@ -17,9 +17,9 @@ import static pepse.PepseGameManager.GAME_BLOCK_SIZE;
  * @author Aron Isaacs
  */
 public class Fruit extends GameObject {
-    private static final Vector2 FRUIT_SIZE = new Vector2(GAME_BLOCK_SIZE, GAME_BLOCK_SIZE);
+    private static final Vector2 FRUIT_SIZE = new Vector2(SIZE, SIZE);
     private static final Color FRUIT_COLOR = new Color(255, 69, 0);
-    private static final float RESPAWN_TIME_SECONDS = 15f;
+    private static final float RESPAWN_TIME_SECONDS = 30f;
     private static final int ENERGY_VALUE = 10;
     private static final Renderable FRUIT_RENDERABLE = new OvalRenderable(FRUIT_COLOR);
 

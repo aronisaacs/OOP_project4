@@ -15,7 +15,7 @@ import java.awt.Color;
  */
 public class Night {
     // The maximum opacity level for the night overlay, representing the darkest point of the night.
-    private static final Float MAX_OPAQUENESS = 0.5f;
+    private static final Float MIDNIGHT_OPACITY = 0.5f;
 
     /**
      * Creates a night overlay GameObject that covers the entire game window and transitions its opacity
@@ -36,7 +36,7 @@ public class Night {
         // Create a transition to change the opacity of the night overlay over time
         new Transition<>(night,
             night.renderer()::setOpaqueness,
-            0f, MAX_OPAQUENESS,
+            0f, MIDNIGHT_OPACITY,
             Transition.CUBIC_INTERPOLATOR_FLOAT,
             cycleLength / 2,
             Transition.TransitionType.TRANSITION_BACK_AND_FORTH,

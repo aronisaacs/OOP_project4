@@ -1,4 +1,4 @@
-package pepse.world;
+package pepse.world.avatar;
 
 import danogl.GameObject;
 import danogl.components.CoordinateSpace;
