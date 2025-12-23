@@ -7,10 +7,11 @@ package pepse.world.infiniteworld;
  */
 @FunctionalInterface
 public interface GroundHeightAt {
-    /**
-     * Accepts an x-coordinate and returns the corresponding ground height.
-     * @param value The x-coordinate for which to determine the ground height.
-     * @return The ground height at the specified x-coordinate.
-     */
-    float accept(float value);
+	/**
+	 * Accepts an x-coordinate and returns the corresponding ground height.
+	 *
+	 * @param value The x-coordinate for which to determine the ground height.
+	 * @return The ground height at the specified x-coordinate.
+	 */
+	float accept(float value);
 }
