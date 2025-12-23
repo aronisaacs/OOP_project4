@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
  * @author Aron Isaacs
  */
 public class Block extends GameObject implements ChunkLoadable {
+    /** The size of the block */
     public final static int SIZE = 30;// Top-left corner, adjust as needed
 
     /**

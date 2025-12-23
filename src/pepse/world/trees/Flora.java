@@ -70,7 +70,7 @@ public class Flora extends Scrollable<Tree> {
         return new Tree(position);
     }
 
-    /*
+    /**
      * Generates a pseudo-random float in the range [0, 1) based on the input x-coordinate and the SEED.
      * This function uses bitwise operations and multiplications to create a hash-like effect.
      * @param x the input x-coordinate used to generate the pseudo-random float.

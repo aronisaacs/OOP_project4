@@ -22,6 +22,7 @@ import pepse.world.trees.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Supplier;
 
 /**
@@ -30,29 +31,25 @@ import java.util.function.Supplier;
  * It extends the GameManager class from the danogl library.
  * The game is a side-scrolling platformer where the player controls an avatar that can move and jump.
  * The game features a procedurally generated terrain, trees, and a day-night cycle.
- * The game also features an energy bar that depletes over time and can be replenished by collecting fruits from trees.
+ * The game also features an energy bar that depletes over time and can be replenished by
+ * collecting fruits from trees.
  * note that this is more of a simulation than a game, as there are no win or lose conditions.
  * @see GameManager
  * @see Terrain
  * @see Tree
  * @see Avatar
- * @author Aron Isaacs
+ * @author ron.stein
  */
 public class PepseGameManager extends GameManager {
-    /*
-    The seed for the pseudo-random number generator (used throughout the game).
-    generated randomly at the start of each game, and then kept constant to ensure object permanence.
-     */
-    // all times are in seconds
 
-
-    private static final int SEED = 5;
     private static final float CYCLE_LENGTH_OF_DAY = 30f;
     private ImageReader imageReader;
     private UserInputListener inputListener;
     private WindowController windowController;
     private Avatar avatar;
     private final List<Scrollable<?>> scrollables = new ArrayList<>();
+    private static final float AVATAR_SIZE = 50f;
+    private static final float MAX_ENERGY = 100f;
     GroundHeightAt groundHeightAt;
 
     /**
@@ -76,7 +73,10 @@ public class PepseGameManager extends GameManager {
      * @param windowController used to control the game window (e.g., get its dimensions).
      */
     @Override
-    public void initializeGame(ImageReader imageReader, SoundReader soundReader, UserInputListener inputListener, WindowController windowController) {
+    public void initializeGame(ImageReader imageReader,
+                               SoundReader soundReader,
+                               UserInputListener inputListener,
+                               WindowController windowController) {
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
         this.imageReader = imageReader;
         this.inputListener = inputListener;
@@ -91,10 +91,12 @@ public class PepseGameManager extends GameManager {
      */
     private void makeGameObjects(WindowController windowController) {
         makeBackgroundObjects();
-        Terrain terrain = new Terrain(windowController.getWindowDimensions(), SEED);
+        Random rand = new Random();
+        int seed = rand.nextInt();
+        Terrain terrain = new Terrain(windowController.getWindowDimensions(), seed);
         groundHeightAt = terrain::groundHeightAt;
         scrollables.add(terrain);
-        scrollables.add(new Flora(SEED, groundHeightAt));
+        scrollables.add(new Flora(seed, groundHeightAt));
         updateScrollables(0);
         this.avatar = makeAvatar();
         makeEnergyBar(avatar::getEnergy);
@@ -137,8 +139,7 @@ public class PepseGameManager extends GameManager {
      * @return the created avatar.
      */
     private Avatar makeAvatar() {
-        //todo decide on initial position of avatar
-        float startingY = groundHeightAt.accept(0f) - Avatar.AVATAR_SIZE;
+        float startingY = groundHeightAt.accept(0f) - AVATAR_SIZE;
         Vector2 initialPosition = new Vector2(0, startingY);
         var avatar = new Avatar(initialPosition, inputListener, imageReader);
         gameObjects().addGameObject(avatar, Layer.DEFAULT);
@@ -151,7 +152,7 @@ public class PepseGameManager extends GameManager {
      * @param energySupplier a supplier that provides the current energy level of the avatar.
      */
     private void makeEnergyBar(Supplier<Float> energySupplier) {
-        EnergyBar energyBar = new EnergyBar(EnergyBar.ENERGY_BAR_POSITION, Avatar.MAX_ENERGY,
+        EnergyBar energyBar = new EnergyBar(EnergyBar.ENERGY_BAR_POSITION, MAX_ENERGY,
                 energySupplier);
         gameObjects().addGameObject(energyBar, Layer.UI);
     }

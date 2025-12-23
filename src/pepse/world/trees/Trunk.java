@@ -13,6 +13,7 @@ import java.awt.*;
  */
 public class Trunk {
     private static final Color TRUNK_COLOR = new Color(100, 50, 20);
+    private static final String TRUNK_TAG = "trunk";
 
     /**
      * Creates a trunk GameObject at the specified position with the given dimensions.
@@ -25,7 +26,7 @@ public class Trunk {
         GameObject trunk = new GameObject(position, dimensions, new RectangleRenderable(TRUNK_COLOR));
         trunk.physics().preventIntersectionsFromDirection(Vector2.ZERO);
         trunk.physics().setMass(GameObjectPhysics.IMMOVABLE_MASS);
-        trunk.setTag("trunk");
+        trunk.setTag(TRUNK_TAG);
         return trunk;
     }
 }

@@ -20,6 +20,12 @@ public class ChunkManager<T extends ChunkLoadable> {
      */
     @FunctionalInterface
     public interface ChunkPlacer<T extends ChunkLoadable> {
+        /**
+         * Places game objects within the specified left and right bounds.
+         * @param leftBound The left boundary of the chunk range.
+         * @param rightBound The right boundary of the chunk range.
+         * @return A list of ChunkLoadable objects to be added to the game within the specified bounds.
+         */
         List<T> place(int leftBound, int rightBound);
     }
 
@@ -30,6 +36,13 @@ public class ChunkManager<T extends ChunkLoadable> {
     private final int rangeAfter;
     private final ChunkPlacer<T> placer;
 
+    /**
+     * Constructs a ChunkManager with the specified chunk size, range, and placer function.
+     * @param chunkSize The size of each chunk in the game world.
+     * @param rangeBefore chunks to load before the avatar's current chunk.
+     * @param rangeAfter The number of chunks to load before and after the avatar's current chunk.
+     * @param placer A ChunkPlacer function to create game objects within specified bounds.
+     */
     public ChunkManager(int chunkSize, int rangeBefore, int rangeAfter, ChunkPlacer<T> placer) {
         this.chunkSize = chunkSize;
         this.rangeBefore = rangeBefore;

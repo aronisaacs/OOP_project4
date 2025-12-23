@@ -10,6 +10,11 @@ import pepse.world.Terrain;
 
 import java.awt.Color;
 
+/**
+ * A class representing the sun in the game world.
+ * The sun moves in a circular path to simulate a day-night cycle.
+ * @author Aron Isaacs
+ */
 public class Sun {
     
     private static final float SUN_SIZE_RATIO = 0.1f; // Sun diameter is 10% of window width
@@ -46,12 +51,12 @@ public class Sun {
      * @param initialSunCenter The initial center position of the sun.
      * @param cycleCenter The center of the circular path.
      */
-    private static void addSunTransition(GameObject sun, Vector2 initialSunCenter, Vector2 cycleCenter, float cycleLength) {
+    private static void addSunTransition(GameObject sun, Vector2 initialSunCenter, Vector2 cycleCenter,
+                                         float cycleLength) {
         new Transition<>(
                 sun,
                 angle ->
-                {sun.setCenter(initialSunCenter.subtract(cycleCenter).rotated(angle).add(cycleCenter));
-                },
+                        sun.setCenter(initialSunCenter.subtract(cycleCenter).rotated(angle).add(cycleCenter)),
                 0f,
                 360f,
                 Transition.LINEAR_INTERPOLATOR_FLOAT,

@@ -8,6 +8,11 @@ import danogl.util.Vector2;
 
 import java.awt.Color;
 
+/**
+ * A class representing a sun halo effect in the game world.
+ * The sun halo is a semi-transparent circular glow that follows the sun's position.
+ * @author Aron Isaacs
+ */
 public class SunHalo {
     private static final Color HALO_COLOR = new Color(255, 255, 0, 20); // Semi-transparent yellow
 
@@ -19,7 +24,9 @@ public class SunHalo {
     public static GameObject create(GameObject sun) {
         float haloDiameter = sun.getDimensions().x() * 1.5f;
         Renderable haloRenderable = new OvalRenderable(HALO_COLOR);
-        GameObject halo = new GameObject(Vector2.ZERO, new Vector2(haloDiameter, haloDiameter), haloRenderable);
+        GameObject halo = new GameObject(Vector2.ZERO,
+                new Vector2(haloDiameter, haloDiameter),
+                haloRenderable);
         halo.setCoordinateSpace(CoordinateSpace.CAMERA_COORDINATES);
         halo.setTag("sunHalo");
 

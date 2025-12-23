@@ -22,6 +22,7 @@ public class Terrain extends Scrollable<Block> {
     /** The ratio of the window height at which the ground starts. */
     public static final float GROUND_RATIO = 0.7f;
     private static final int NOISE_FACTOR = 7;
+    private static final String GROUND_TAG = "ground";
 
     private final int groundHeightAtX0;
     private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
@@ -66,7 +67,8 @@ public class Terrain extends Scrollable<Block> {
     }
 
     /**
-     * Creates a vertical column of blocks at the specified x-coordinate, starting from the given top y-coordinate.
+     * Creates a vertical column of blocks at the specified x-coordinate, starting from the
+     * given top y-coordinate.
      * The column extends downwards for a predefined depth, creating a solid ground structure.
      * Each block is assigned a color that approximates the base ground color.
      * @param x The x-coordinate where the column of blocks will be created.
@@ -82,7 +84,7 @@ public class Terrain extends Scrollable<Block> {
                     new RectangleRenderable(ColorSupplier.approximateColor(BASE_GROUND_COLOR))
             );
 
-            block.setTag("ground");
+            block.setTag(GROUND_TAG);
             blocks.add(block);
         }
     }

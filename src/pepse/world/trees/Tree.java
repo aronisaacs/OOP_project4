@@ -42,9 +42,11 @@ public class Tree implements ChunkLoadable {
     public Tree(Vector2 position){
 
         random = new Random((long) position.x() + (long) position.y() * 31);
-        int trunkHeightBlocks = TRUNK_HEIGHT_MIN + random.nextInt(TRUNK_HEIGHT_MAX - TRUNK_HEIGHT_MIN + 1);
+        int trunkHeightBlocks =
+                TRUNK_HEIGHT_MIN + random.nextInt(TRUNK_HEIGHT_MAX - TRUNK_HEIGHT_MIN + 1);
         int trunkHeight = trunkHeightBlocks * TREE_WIDTH;
-        this.trunk = Trunk.create(position.add(new Vector2(0, -trunkHeight)), new Vector2(TREE_WIDTH, trunkHeight));
+        this.trunk = Trunk.create(position.add(new Vector2(0, -trunkHeight)),
+                new Vector2(TREE_WIDTH, trunkHeight));
         this.leaves = new HashSet<>();
         this.fruits = new HashSet<>();
         int startX = (int) position.x() - (FOLIAGE_WIDTH_BLOCKS / 2) * TREE_WIDTH;
@@ -91,7 +93,8 @@ public class Tree implements ChunkLoadable {
 
     /**
      * Removes the tree's components (trunk, leaves, fruits) from the game using the provided BiConsumer.
-     * @param removeObject A BiConsumer that accepts a GameObject and a layer integer to remove objects from the game.
+     * @param removeObject A BiConsumer that accepts a GameObject and a
+     *                     layer integer to remove objects from the game.
      */
     @Override
     public void destroy(BiConsumer<GameObject, Integer> removeObject) {

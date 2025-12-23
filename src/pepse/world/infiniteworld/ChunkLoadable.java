@@ -12,12 +12,14 @@ import java.util.function.BiConsumer;
 public interface ChunkLoadable {
     /**
      * Adds the game object to the game using the provided BiConsumer.
-     * @param addGameObject A BiConsumer that takes a GameObject and an Integer (chunk index) to add the object to the game.
+     * @param addGameObject A BiConsumer that takes a GameObject and an Integer (chunk index) to
+     *                      add the object to the game.
      */
     void addToGame(BiConsumer<GameObject, Integer> addGameObject);
     /**
      * Destroys the game object using the provided BiConsumer.
-     * @param destroyGameObject A BiConsumer that takes a GameObject and an Integer (chunk index) to remove the object from the game.
+     * @param destroyGameObject A BiConsumer that takes a GameObject and an Integer (chunk index) to
+     *                          remove the object from the game.
      */
     void destroy(BiConsumer<GameObject, Integer> destroyGameObject);
 }

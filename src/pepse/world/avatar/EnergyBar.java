@@ -14,6 +14,7 @@ import java.util.function.Supplier;
  * @author Aron Isaacs
  */
 public class EnergyBar extends GameObject {
+    /** The position of the energy bar in the game window. Used in the PepseGameManager */
     public static final Vector2 ENERGY_BAR_POSITION = new Vector2(20f, 20f);
     private static final Vector2 BAR_SIZE = new Vector2(60, 20);
     private final Supplier<Float> energySupplier;

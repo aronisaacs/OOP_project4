@@ -1,6 +1,7 @@
 package pepse.world.avatar;
 
 import danogl.GameObject;
+import danogl.collisions.Collision;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.AnimationRenderable;
@@ -11,43 +12,43 @@ import java.awt.event.KeyEvent;
 
 /**
  * Represents the player's avatar in the game, capable of moving, jumping, and managing energy levels.
- * The avatar's state changes based on user input and its current velocity, affecting its animation and energy consumption.
- * @author Aron Isaacs
+ * The avatar's state changes based on user input and its current velocity,
+ * affecting its animation and energy consumption.
+ * @author ron.stein
  */
 public class Avatar extends GameObject {
 
     private static final float VELOCITY_X = 400;
     private static final float VELOCITY_Y = -650;
     private static final float GRAVITY = 600;
-    public static final float AVATAR_SIZE = 50f;
-
-    public static final float MAX_ENERGY = 100f;
-    private static final float ENERGY_GAIN_RATE = 1f; // per second
-    private static final float ENERGY_LOSS_MOVE = 2f;  // per second
+    private static final float AVATAR_SIZE = 50f;
+    private static final float MAX_ENERGY = 100f;
+    private static final float ENERGY_GAIN_RATE = 1f; // per Speed Factor
+    private static final float ENERGY_LOSS_MOVE = 2f;  // per Speed Factor
+    private static final float ENERGY_LOAD_SPEED_FACTOR = 5f;
     private static final float ENERGY_LOSS_JUMP = 20f;
     private static final float ENERGY_DOUBLE_LOSS_JUMP = 50f;
-
-
-
     // Animation file name arrays
     private static final String[] IDLE_FRAMES = {
             "assets/idle_0.png", "assets/idle_1.png", "assets/idle_2.png", "assets/idle_3.png"
     };
     private static final String[] RUN_FRAMES = {
-            "assets/run_0.png", "assets/run_1.png", "assets/run_2.png", "assets/run_3.png", "assets/run_4.png", "assets/run_5.png"
+            "assets/run_0.png", "assets/run_1.png", "assets/run_2.png",
+            "assets/run_3.png", "assets/run_4.png", "assets/run_5.png"
     };
     private static final String[] JUMP_FRAMES = {
             "assets/jump_0.png", "assets/jump_1.png", "assets/jump_2.png", "assets/jump_3.png"
     };
-
-
+    private boolean canDoubleJump = false;
     private float energy = MAX_ENERGY;
     private final UserInputListener inputListener;
     private final ImageReader imageReader;
     private final AnimationRenderable idleRenderable;
     private final AnimationRenderable runRenderable;
     private final AnimationRenderable jumpRenderable;
-    private State currentState = State.IDLE;
+    private boolean facingLeft;
+    private boolean isMovingHorizontally;
+    private boolean isCollidedWithGround = false;
 
     /**
      * Constructs an Avatar object at the specified position with the given input listener and image reader.
@@ -69,7 +70,18 @@ public class Avatar extends GameObject {
 
         renderer().setRenderable(idleRenderable);
     }
-
+    @Override
+    public void onCollisionEnter(GameObject other, Collision collision) {
+        super.onCollisionEnter(other, collision);
+        if(other.getTag().equals("ground")) {
+            isCollidedWithGround = true;
+        }
+    }
+    @Override
+    public void onCollisionExit(GameObject other) {
+        super.onCollisionExit(other);
+        isCollidedWithGround = false;
+    }
     /* Loads an array of Renderable frames from the specified file names.
      * @param files The array of file names for the animation frames.
      * @return An array of Renderable objects corresponding to the loaded frames.
@@ -84,29 +96,7 @@ public class Avatar extends GameObject {
 
     /* Enum representing the different states of the avatar.
      */
-    private enum State { IDLE, RUNNING_LEFT, RUNNING_RIGHT, JUMPING, FALLING }
-
-    /* Determines the avatar's state based on user input and energy levels.
-     * @param left Whether the left movement key is pressed.
-     * @param right Whether the right movement key is pressed.
-     * @param space Whether the jump key is pressed.
-     * @return The determined State of the avatar.
-     */
-    private State chooseState(boolean left, boolean right, boolean space) {
-        if (left && !right && energy >= ENERGY_LOSS_MOVE) {
-            return State.RUNNING_LEFT;
-        }
-        if (right && !left && energy >= ENERGY_LOSS_MOVE) {
-            return State.RUNNING_RIGHT;
-        }
-        if (getVelocity().y() < 0) {
-            return State.JUMPING;
-        }
-        if (getVelocity().y() > 0) {
-            return State.FALLING;
-        }
-        return State.IDLE;
-    }
+    private enum State { IDLE, RUNNING_LEFT, RUNNING_RIGHT, JUMPING}
 
     /**
      * Updates the avatar's state, velocity, and animation based on user input and elapsed time.
@@ -116,25 +106,91 @@ public class Avatar extends GameObject {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        State newState = getState();
-        determineVelocity(deltaTime, newState);
+
+        boolean left = inputListener.isKeyPressed(KeyEvent.VK_LEFT);
+        boolean right = inputListener.isKeyPressed(KeyEvent.VK_RIGHT);
+        boolean space = inputListener.isKeyPressed(KeyEvent.VK_SPACE);
+        applyVelocityAndEnergy(deltaTime, left, right, space);
+
+//        boolean spacePressedNow = space && !spacePressed;
+//        spacePressed = space;
+        State newState = chooseCurrentState(left, right);
         chooseRenderable(newState);
     }
+
+    private State chooseCurrentState(boolean left, boolean right) {
+        boolean grounded = getVelocity().y() == 0;
+        if (!grounded) {
+            return State.JUMPING;
+        }
+        if (isMovingHorizontally) {
+            if (left && !right) {return State.RUNNING_LEFT;}
+            if (right && !left) {return State.RUNNING_RIGHT;}
+        }
+        return State.IDLE;
+    }
+
+    private void applyVelocityAndEnergy(float deltaTime, boolean left, boolean right,
+                                        boolean spacePressedNow) {
+        boolean grounded = getVelocity().y() == 0;
+
+        //reset double jump when grounded
+        if(grounded) {
+            canDoubleJump = false;
+        }
+        //horizontal movement
+        float xVel = 0f;
+        if (left && !right) xVel = -VELOCITY_X;
+        if (right && !left) xVel = VELOCITY_X;
+        //Energy consumption/gain
+        if(grounded){
+            if(xVel != 0f) {
+                float cost = ENERGY_LOSS_MOVE * deltaTime * ENERGY_LOAD_SPEED_FACTOR;
+                if(energy >= cost) {
+                    loseEnergy(cost);
+                } else {
+                    xVel = 0f;
+                }
+            } else {
+                if(isCollidedWithGround) {
+                    gainEnergy(ENERGY_GAIN_RATE * deltaTime * ENERGY_LOAD_SPEED_FACTOR);
+                }
+            }
+        }
+        //update facing direction booleans
+        isMovingHorizontally = xVel != 0f;
+        if (xVel < 0) facingLeft = true;
+        else if (xVel > 0) facingLeft = false;
+        transform().setVelocityX(xVel);
+
+        //jumping
+        if(!spacePressedNow) {return;}
+        if (grounded && energy >= ENERGY_LOSS_JUMP) {
+            transform().setVelocityY(VELOCITY_Y);
+            loseEnergy(ENERGY_LOSS_JUMP);
+            canDoubleJump = true;
+            return;
+        }
+        if (!grounded && canDoubleJump && getVelocity().y() > 0 && energy >= ENERGY_DOUBLE_LOSS_JUMP) {
+            transform().setVelocityY(VELOCITY_Y);
+            loseEnergy(ENERGY_DOUBLE_LOSS_JUMP);
+            canDoubleJump = false;
+        }
+        }
+
 
     /* Chooses and sets the appropriate renderable animation based on the avatar's current state.
      * @param newState The new state of the avatar to determine the correct animation.
      */
     private void chooseRenderable(State newState) {
-        if (newState == currentState) return;
         switch (newState) {
             case JUMPING:
                 renderer().setRenderable(jumpRenderable);
-                renderer().setIsFlippedHorizontally(false);
+                renderer().setIsFlippedHorizontally(facingLeft);
                 break;
-            case FALLING:
             case IDLE:
                 renderer().setRenderable(idleRenderable);
-                renderer().setIsFlippedHorizontally(false);
+                renderer().setIsFlippedHorizontally(facingLeft);
                 break;
             case RUNNING_LEFT:
                 renderer().setRenderable(runRenderable);
@@ -145,50 +201,6 @@ public class Avatar extends GameObject {
                 renderer().setIsFlippedHorizontally(false);
                 break;
         }
-        currentState = newState;
-    }
-
-    /* Determines and sets the avatar's horizontal velocity based on its state and energy levels.
-     * Also manages energy consumption and regeneration.
-     * @param deltaTime The time elapsed since the last update call, in seconds.
-     * @param state The current state of the avatar to determine movement behavior.
-     */
-    private void determineVelocity(float deltaTime, State state) {
-        float xVel = 0;
-        switch (state) {
-            case RUNNING_LEFT:
-                xVel = -VELOCITY_X;
-                loseEnergy(ENERGY_LOSS_MOVE * deltaTime);
-                break;
-            case RUNNING_RIGHT:
-                xVel = VELOCITY_X;
-                loseEnergy(ENERGY_LOSS_MOVE * deltaTime);
-                break;
-            default:
-                xVel = 0;
-        }
-        transform().setVelocityX(xVel);
-
-        if (state == State.IDLE) {
-            gainEnergy(deltaTime * ENERGY_GAIN_RATE);
-        }
-    }
-
-    /* Determines the avatar's state based on user input and manages jumping behavior and energy consumption.
-     * @return The determined State of the avatar.
-     */
-    private State getState() {
-        boolean left = inputListener.isKeyPressed(KeyEvent.VK_LEFT);
-        boolean right = inputListener.isKeyPressed(KeyEvent.VK_RIGHT);
-        boolean space = inputListener.isKeyPressed(KeyEvent.VK_SPACE);
-
-        if (space && getVelocity().y() == 0 && energy >= ENERGY_LOSS_JUMP) {
-            transform().setVelocityY(VELOCITY_Y);
-            loseEnergy(ENERGY_LOSS_JUMP);
-        }
-
-        State state = chooseState(left, right, space);
-        return state;
     }
 
     /** Increases the avatar's energy by the specified amount, up to the maximum energy limit.
@@ -213,4 +225,3 @@ public class Avatar extends GameObject {
         return energy;
     }
 }
-
