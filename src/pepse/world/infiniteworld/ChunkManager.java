@@ -44,7 +44,7 @@ public class ChunkManager<T extends ChunkLoadable> {
 	 *
 	 * @param chunkSize   The size of each chunk in the game world.
 	 * @param rangeBefore chunks to load before the avatar's current chunk.
-	 * @param rangeAfter  The number of chunks to load before and after the avatar's current chunk.
+	 * @param rangeAfter  The number of chunks to load after the avatar's current chunk.
 	 * @param placer      A ChunkPlacer function to create game objects within specified bounds.
 	 */
 	public ChunkManager(int chunkSize, int rangeBefore, int rangeAfter, ChunkPlacer<T> placer) {
@@ -65,7 +65,7 @@ public class ChunkManager<T extends ChunkLoadable> {
 	public void update(float avatarX,
 					   BiConsumer<GameObject, Integer> addGameObject,
 					   BiConsumer<GameObject, Integer> destroyGameObject) {
-		int avatarChunk = Math.round(avatarX / chunkSize);
+		int avatarChunk = (int) Math.floor(avatarX / chunkSize);
 		int minChunk = avatarChunk - rangeBefore;
 		int maxChunk = avatarChunk + rangeAfter;
 

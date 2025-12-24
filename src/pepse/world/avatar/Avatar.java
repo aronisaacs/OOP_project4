@@ -1,13 +1,11 @@
 package pepse.world.avatar;
 
 import danogl.GameObject;
-import danogl.collisions.Collision;
 import danogl.gui.ImageReader;
 import danogl.gui.UserInputListener;
 import danogl.gui.rendering.AnimationRenderable;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-
 import java.awt.event.KeyEvent;
 
 
@@ -45,7 +43,6 @@ public class Avatar extends GameObject {
 	private static final double IDLE_TIME_BETWEEN_FRAMES = 0.3f;
 	private static final double RUN_TIME_BETWEEN_FRAMES = 0.1f;
 	private static final double JUMP_TIME_BETWEEN_FRAMES = 0.2f;
-	private static final String GROUND_TAG = "ground";
 	private boolean canDoubleJump = false;
 	private float energy = MAX_ENERGY;
 	private final UserInputListener inputListener;
@@ -55,7 +52,8 @@ public class Avatar extends GameObject {
 	private final AnimationRenderable jumpRenderable;
 	private boolean facingLeft;
 	private boolean isMovingHorizontally;
-	private int groundContacts = 0;
+	//REMOVED THIS FOR NOW - APPARANTLY ACCORDING TO THE FORUM ENERGY CAN BE GAINED ON TREETOPS TOO
+	//private int groundContacts = 0;
 	/**
 	 * Constructs an Avatar object at the specified position with the given input listener and image reader.
 	 * Initializes the avatar's physics, animations, and rendering.
@@ -80,31 +78,32 @@ public class Avatar extends GameObject {
 
 		renderer().setRenderable(idleRenderable);
 	}
+//REMOVED THIS FOR NOW - APPARANTLY ACCORDING TO THE FORUM ENERGY CAN BE GAINED ON TREETOPS TOO
+//	/**
+//	 * Handles collision events with other game objects.
+//	 * @param other    The other game object involved in the collision.
+//	 * @param collision Information about the collision event.
+//	 */
+//	@Override
+//	public void onCollisionEnter(GameObject other, Collision collision) {
+//		super.onCollisionEnter(other, collision);
+//		if (other.getTag().equals(Terrain.GROUND_TAG)) {
+//			groundContacts++;
+//		}
+//	}
 
-	/**
-	 * Handles collision events with other game objects.
-	 * @param other    The other game object involved in the collision.
-	 * @param collision Information about the collision event.
-	 */
-	@Override
-	public void onCollisionEnter(GameObject other, Collision collision) {
-		super.onCollisionEnter(other, collision);
-		if (other.getTag().equals(GROUND_TAG)) {
-			groundContacts++;
-		}
-	}
-
-	/**
-	 * Handles the event when the avatar exits a collision with another game object.
-	 * @param other The other game object involved in the collision.
-	 */
-	@Override
-	public void onCollisionExit(GameObject other) {
-		super.onCollisionExit(other);
-		if (other.getTag().equals(GROUND_TAG)) {
-			groundContacts = Math.max(0, groundContacts - 1);
-		}
-	}
+// REMOVED THIS FOR NOW - APPARANTLY ACCORDING TO THE FORUM ENERGY CAN BE GAINED ON TREETOPS TOO
+//	/**
+//	 * Handles the event when the avatar exits a collision with another game object.
+//	 * @param other The other game object involved in the collision.
+//	 */
+//	@Override
+//	public void onCollisionExit(GameObject other) {
+//		super.onCollisionExit(other);
+//		if (other.getTag().equals(Terrain.GROUND_TAG)) {
+//			groundContacts = Math.max(0, groundContacts - 1);
+//		}
+//	}
 
 	/* Loads an array of Renderable frames from the specified file names.
 	 * @param files The array of file names for the animation frames.
@@ -192,7 +191,7 @@ public class Avatar extends GameObject {
 	 */
 	private float applyGroundEnergy(float deltaTime, boolean grounded, float xVel) {
 		if (!grounded) {
-			return xVel; // no energy change mid-air
+			return xVel; // no energy change midair
 		}
 
 		if (xVel != 0f) {
@@ -202,7 +201,7 @@ public class Avatar extends GameObject {
 			} else {
 				xVel = 0f; // not enough energy to move
 			}
-		} else if (groundContacts > 0) {
+		} else {
 			gainEnergy(ENERGY_GAIN_RATE * deltaTime * ENERGY_LOAD_SPEED_FACTOR);
 		}
 

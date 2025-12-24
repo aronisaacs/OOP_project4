@@ -15,8 +15,10 @@ import java.awt.*;
  */
 public class Sky {
 	private static final Color BASIC_SKY_COLOR = Color.decode("#80C6E5");
-	private static final String SKY_TAG = "sky";
+	/** The tag assigned to the sky GameObject. */
+	public static final String SKY_TAG = "sky";
 
+	private Sky(){}
 	/**
 	 * Creates a sky GameObject that covers the entire game window with a basic sky color.
 	 *

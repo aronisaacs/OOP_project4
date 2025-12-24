@@ -19,7 +19,8 @@ import static pepse.world.Block.SIZE;
  * @author Aron Isaacs
  */
 public class Fruit extends GameObject {
-	private static final Vector2 FRUIT_SIZE = new Vector2(SIZE, SIZE);
+	// fruit size Slightly smaller than a leaf size
+	private static final Vector2 FRUIT_SIZE = new Vector2(SIZE - 5, SIZE - 5);
 	private static final Color FRUIT_COLOR = new Color(255, 69, 0);
 	private static final float RESPAWN_TIME_SECONDS = 30f;
 	private static final int ENERGY_VALUE = 10;

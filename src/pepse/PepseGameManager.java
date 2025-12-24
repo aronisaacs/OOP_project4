@@ -193,3 +193,4 @@ public class PepseGameManager extends GameManager {
 		updateScrollables(avatar.getCenter().x());
 	}
 }
+

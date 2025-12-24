@@ -18,10 +18,8 @@ import java.util.function.BiConsumer;
  * @author Aron Isaacs
  */
 public class Block extends GameObject implements ChunkLoadable {
-	/**
-	 * The size of the block
-	 */
-	public final static int SIZE = 30;// Top-left corner, adjust as needed
+	/** The size of the block.*/
+	public static final int SIZE = 30;// Top-left corner, adjust as needed
 
 	/**
 	 * Constructs a Block object at the specified position with the given renderable.
@@ -43,7 +41,6 @@ public class Block extends GameObject implements ChunkLoadable {
 	 */
 	@Override
 	public void addToGame(BiConsumer<GameObject, Integer> addGameObject) {
-		// Add this block to the game using addGameObject
 		addGameObject.accept(this, Layer.STATIC_OBJECTS);
 	}
 

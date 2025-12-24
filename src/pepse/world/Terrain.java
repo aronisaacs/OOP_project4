@@ -27,7 +27,8 @@ public class Terrain extends Scrollable<Block> {
 	 */
 	public static final float GROUND_RATIO = 0.7f;
 	private static final int NOISE_FACTOR = 7;
-	private static final String GROUND_TAG = "ground";
+	/** The tag assigned to ground blocks. */
+	public static final String GROUND_TAG = "ground";
 
 	private final int groundHeightAtX0;
 	private static final Color BASE_GROUND_COLOR = new Color(212, 123, 74);
